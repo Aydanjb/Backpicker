@@ -1,10 +1,14 @@
-function App() {
+import List from "./components/List";
 
+function App() {
   return (
-      <>
-        <h1 className="text-3xl font-bold underline">Backpicker</h1>
-      </>
-  )
+    <div>
+      <h1 className="mx-2.5 mbs-2.5 text-3xl font-bold">Backpicker</h1>
+      <div className="mx-auto mbs-2.5 max-w-7xl">
+        <List className=""></List>
+      </div>
+    </div>
+  );
 }
 
-export default App
+export default App;
