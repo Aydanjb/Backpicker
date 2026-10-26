@@ -1,6 +1,6 @@
 import List from './components/List';
-import {Link, Route, Routes} from "react-router";
-import Browse from "@/pages/Browse.tsx";
+import { Link, Route, Routes } from 'react-router';
+import Browse from '@/pages/Browse.tsx';
 
 function App() {
 	return (

@@ -2,6 +2,7 @@
 import type { Product, Slot } from '@/lib/types';
 import { Button } from './ui/button';
 import { IconPlus } from '@tabler/icons-react';
+import { Link } from 'react-router';
 
 interface Props {
 	slot: Slot;
@@ -15,7 +16,7 @@ function EmptyRow({ slot }: Props) {
 				<a href="">{slot.label}</a>
 			</TableCell>
 			<TableCell>
-				<Button>
+				<Button render={<Link to={`/products/${slot.label}`} />}>
 					<IconPlus stroke={3} data-icon="inline-start" /> Add a{' '}
 					{slot.label}
 				</Button>

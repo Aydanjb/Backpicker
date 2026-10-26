@@ -3,7 +3,7 @@ import json
 import logging
 import sqlite3
 
-from camoufox.sync_api import Camoufox
+import clearcote
 
 BASE_URL = "https://www.rei.com"
 START_URL = f"{BASE_URL}/c/camping-and-hiking"
@@ -13,6 +13,7 @@ TOTAL_PAGES = (
     146  # Known page count for camping-and-hiking; avoids an extra visit to check
 )
 DB_FILE = "products.db"
+FINGERPRINT_SEED = "backpicker-rei"  # Same seed gives the same device fingerprint every run
 
 logging.basicConfig(
     level=logging.INFO,
@@ -96,20 +97,15 @@ init_db(conn)
 scraped_links = {row[0] for row in conn.execute("SELECT link FROM products")}
 log.info(f"Loaded {len(scraped_links)} already-scraped products from {DB_FILE}.")
 
-with Camoufox(os="windows", headless=True, humanize=True) as browser:
+with clearcote.launch(
+    fingerprint=FINGERPRINT_SEED, platform="windows", headless=False, humanize=True
+) as browser:
     log.info("Starting REI scraper...")
     page = browser.new_page()
 
     scraped_count = 0
 
     for page_number in range(1, TOTAL_PAGES + 1):
-        if scraped_count >= MAX_PRODUCTS_PER_RUN:
-            log.info(
-                f"Reached the {MAX_PRODUCTS_PER_RUN}-product limit for this run. "
-                "Stopping early; re-run later to continue where this left off."
-            )
-            break
-
         log.info(f"Scraping page {page_number}...")
         page.goto(f"{START_URL}?page={page_number}")
         elements = page.locator("li[data-cnstrc-item-id]")
@@ -122,13 +118,6 @@ with Camoufox(os="windows", headless=True, humanize=True) as browser:
             if link in scraped_links:
                 log.info(f"Product already scraped: {link}. Skipping...")
                 continue
-
-            if scraped_count >= MAX_PRODUCTS_PER_RUN:
-                log.info(
-                    f"Reached the {MAX_PRODUCTS_PER_RUN}-product limit for this run. "
-                    "Stopping early; re-run later to continue where this left off."
-                )
-                break
 
             log.info(f"Navigating to product page: {link}")
             page.goto(BASE_URL + link)
@@ -174,9 +163,6 @@ with Camoufox(os="windows", headless=True, humanize=True) as browser:
             save_product(conn, link, product)
             scraped_links.add(link)
             scraped_count += 1
-
-            log.info("Going back to the product list page...")
-            page.go_back()
 
     log.info("Scraping completed. Closing the browser...")
     browser.close()
