@@ -9,44 +9,19 @@ import {
 	TableRow,
 } from '@/components/ui/table.tsx';
 import { formatPrice, formatWeight } from '@/lib/utils.ts';
+import { useQuery } from '@tanstack/react-query';
 import REILogo from '@/assets/REI_idsW56ot2c_0.svg';
-import {useState} from "react";
-import type {Kit} from "@/lib/types.tsx";
-
-const mockData = [
-	{
-		id: 0,
-		name: "Osprey Stratos 24 Pack - Men's",
-		priceCents: 14999,
-		weights: ['2 lbs. 15.2 oz.'],
-		link: 'https://www.rei.com/product/C03941/osprey-stratos-24-pack-mens',
-		image: 'https://www.rei.com/media/3c00cd80-0f87-400f-9fc0-0bc7d78d033b',
-		ratings: [4.5, 1293],
-	},
-	{
-		id: 0,
-		name: "Osprey Stratos 24 Pack - Men's",
-		priceCents: 14999,
-		weights: ['2 lbs. 15.2 oz.'],
-		link: 'https://www.rei.com/product/C03941/osprey-stratos-24-pack-mens',
-		image: 'https://www.rei.com/media/3c00cd80-0f87-400f-9fc0-0bc7d78d033b',
-		ratings: [2, 300],
-	},
-	{
-		id: 0,
-		name: "Osprey Stratos 24 Pack - Men's",
-		priceCents: 14999,
-		weights: ['2 lbs. 15.2 oz.'],
-		link: 'https://www.rei.com/product/C03941/osprey-stratos-24-pack-mens',
-		image: 'https://www.rei.com/media/3c00cd80-0f87-400f-9fc0-0bc7d78d033b',
-		ratings: [5, 10],
-	}
-];
 
 function Browse() {
 	const { item } = useParams();
 	const navigate = useNavigate();
 
+	const { data, isPending } = useQuery({
+		queryKey: ['products'],
+		queryFn: getProducts,
+	});
+
+	// @ts-ignore
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="flex items-center justify-between">
@@ -61,7 +36,6 @@ function Browse() {
 			<Table>
 				<TableHeader>
 					<TableRow>
-						<TableHead />
 						<TableHead>Name</TableHead>
 						<TableHead>Weight</TableHead>
 						<TableHead>Price</TableHead>
@@ -70,11 +44,63 @@ function Browse() {
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					<TableRow></TableRow>
+					{isPending ? (
+						<p>Loading</p>
+					) : (
+						data.map((product: any) => (
+							<TableRow key={product.id}>
+								<TableCell>
+									<div className="flex flex-row items-center gap-2">
+										<img
+											src={product.image}
+											alt=""
+											className="mix-blend-multiply"
+											width="5%"
+											height="2%"
+										/>
+										<a
+											href={product.link}
+											className="font-semibold hover:underline"
+										>
+											{product.name}
+										</a>
+									</div>
+								</TableCell>
+								<TableCell>
+									{formatWeight(product.weights[0])}
+								</TableCell>
+								<TableCell className="font-bold text-green-600">
+									{formatPrice(product.priceCents)}
+								</TableCell>
+								<TableCell><p>1 star</p></TableCell>
+								<TableCell>
+									<div className="flex flex-row gap-6">
+										<a href={product.link}>
+											<img
+												src={REILogo}
+												alt="REI Logo"
+												width="50"
+											/>
+										</a>
+										<a href={product.link}>
+											<Button className="bg-blue-600">
+												Select
+											</Button>
+										</a>
+									</div>
+								</TableCell>
+							</TableRow>
+						))
+					)}
 				</TableBody>
 			</Table>
 		</div>
 	);
 }
+
+const getProducts = async () => {
+	const response = await fetch('/api/products/search?query=');
+	return await response.json();
+};
 
 export default Browse;

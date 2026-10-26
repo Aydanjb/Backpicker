@@ -19,6 +19,7 @@ public static class ProductEndpoints
                     p.Name,
                     p.Brand,
                     p.PriceCents,
+                    p.Url,
                     p.Image,
                     p.Weights.Select(w => w.Weight).ToList()))
                 .ToListAsync();
