@@ -568,3 +568,7 @@ scraper/logs/
 .venv/
 bin/
 obj/
+scraper/cache/
+scraper/browser-profile/
+scraper/identity.pkl
+scraper/*.json
