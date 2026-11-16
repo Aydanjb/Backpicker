@@ -99,6 +99,7 @@ def open_browser():
         block_images=True,
         geoip=True,
         humanize=True,
+        headless=True
     )
 
 
