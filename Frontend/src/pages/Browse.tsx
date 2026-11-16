@@ -72,7 +72,9 @@ function Browse() {
 								<TableCell className="font-bold text-green-600">
 									{formatPrice(product.priceCents)}
 								</TableCell>
-								<TableCell><p>1 star</p></TableCell>
+								<TableCell>
+									<p>1 star</p>
+								</TableCell>
 								<TableCell>
 									<div className="flex flex-row gap-6">
 										<a href={product.link}>
