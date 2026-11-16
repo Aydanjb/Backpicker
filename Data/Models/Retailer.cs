@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Backend.Data.Models;
+namespace Data.Models;
 
 public class Retailer
 {

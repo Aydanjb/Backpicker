@@ -1,4 +1,4 @@
-﻿using Backend.Data;
+﻿using Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Features.Products;
