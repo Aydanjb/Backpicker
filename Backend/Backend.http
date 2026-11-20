@@ -4,3 +4,8 @@ GET {{Backend_HostAddress}}/api/products/search?query=tent
 Accept: application/json
 
 ###
+
+GET {{Backend_HostAddress}}/api/products/search?slot=Sleeping%20Pad
+Accept: application/json
+
+###
