@@ -8,7 +8,9 @@ public class ProductWeight
 
     [MaxLength(255)] public required string Size { get; set; }
 
-    [MaxLength(255)] public required string Weight { get; set; }
+    public required string Weight { get; set; }
+
+    public int Grams { get; set; }
 
     public Product? Product { get; set; }
 }

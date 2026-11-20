@@ -1,6 +1,5 @@
 using Data.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Data;
 
@@ -18,6 +17,14 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
         modelBuilder.Entity<RetailerProduct>()
             .HasIndex(rp => new { rp.RetailerId, rp.ProductUrl })
+            .IsUnique();
+
+        modelBuilder.Entity<Retailer>()
+            .HasIndex(r => r.Name)
+            .IsUnique();
+
+        modelBuilder.Entity<Product>()
+            .HasIndex(p => p.MatchKey)
             .IsUnique();
 
         modelBuilder.Entity<Product>()

@@ -12,7 +12,7 @@ public class Product
 
     [MaxLength(255)] public required string Brand { get; set; }
 
-    [MaxLength(255)] public required string Category { get; set; }
+    [MaxLength(255)] public string? Category { get; set; }
 
     public DateTime CreatedAt { get; set; }
 
